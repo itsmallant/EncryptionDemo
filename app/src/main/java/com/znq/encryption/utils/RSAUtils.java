@@ -254,11 +254,11 @@ public class RSAUtils {
      * @throws Exception
      */
     public static byte[] encryptByPrivateKey(byte[] data, String privateKey) throws Exception {
-        byte[] keyBytes = Base64.decode(privateKey);
+        byte[] keyBytes = Base64.decodeNoWrap(privateKey);
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         Key privateK = keyFactory.generatePrivate(pkcs8KeySpec);
-        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        Cipher cipher = Cipher.getInstance(CIPHER_MODE);
         cipher.init(Cipher.ENCRYPT_MODE, privateK);
         int inputLen = data.length;
         ByteArrayOutputStream out = new ByteArrayOutputStream();

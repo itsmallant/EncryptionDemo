@@ -100,11 +100,11 @@ public class MainActivity extends AppCompatActivity {
         //客户端使用随机key对数据进行AES加密
         String encryptedBody = AESUtils.encrypt(body, key);
         //客户端使用服务端公钥对随机key进行RSA加密
-        String encryptedKey = Base64.encodeToString(RSAUtils.encryptByPublicKey(key.getBytes(), server_pub_key));
+        String encryptedKey = Base64.encodeToString(RSAUtils.encryptByPrivateKey(key.getBytes(), server_pri_key));
 
-        Log.e(TAG, "客户端原始数据 key = " + key + " body = " + body);
+        Log.e(TAG, "客户端原始数据 key = " + key + " body = " + body+" encryptedKey = "+encryptedKey);
         //服务端使用服务端私钥RSA解密加密后的key，得到客户端随机生成的key
-        String originKey = new String(RSAUtils.decryptByPrivateKey(Base64.decode(encryptedKey), server_pri_key));
+        String originKey = new String(RSAUtils.decryptByPublicKey(Base64.decode(encryptedKey), server_pub_key));
         //服务端使用随机key，通过AES解密数据
         String originBody = AESUtils.decrypt(encryptedBody, originKey);
 
